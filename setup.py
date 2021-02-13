@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-import uuid
 from setuptools import setup, find_packages
-from pip.req import parse_requirements
 
-install_requirements = parse_requirements("requirements.txt", session=uuid.uuid1())
-requirements = [str(req.req) for req in install_requirements]
+def parse_requirements(filename):
+    """ load requirements from a pip requirements file """
+    lineiter = (line.strip() for line in open(filename))
+    return [line for line in lineiter if line and not line.startswith("#")]
+
 
 setup(
     name="python-tvmaze",
@@ -17,7 +18,7 @@ setup(
     author_email="yakup.adakli@gmail.com",
     url="http://github.com/yakupadakli/python-tvmaze.git",
     packages=find_packages(exclude=["tests"]),
-    install_requires=requirements,
+    install_requires=parse_requirements("requirements.txt"),
     keywords="tvmaze library",
     classifiers=[
         "Development Status :: 3 - Alpha",
